@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="b9ea4335-fd85-4eb4-aba6-e66d60117cf9" name="Changes" comment="" />
+    <list default="true" id="b9ea4335-fd85-4eb4-aba6-e66d60117cf9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/database.sql" beforeDir="false" afterPath="$PROJECT_DIR$/database.sql" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -22,6 +25,11 @@
     </option>
   </component>
   <component name="Git.Settings">
+    <option name="RECENT_BRANCH_BY_REPOSITORY">
+      <map>
+        <entry key="$PROJECT_DIR$" value="master" />
+      </map>
+    </option>
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
   <component name="GitSEFilterConfiguration">
@@ -36,9 +44,6 @@
     <include_path>
       <path value="$PROJECT_DIR$/vendor/composer" />
     </include_path>
-  </component>
-  <component name="ProblemsViewState">
-    <option name="selectedIndex" value="1" />
   </component>
   <component name="ProjectId" id="1yUu36ji7kyMppDQ1LNTM9mhKAN" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
@@ -98,8 +103,24 @@
       <workItem from="1633505896767" duration="26545000" />
       <workItem from="1633591785954" duration="14607000" />
       <workItem from="1633610359009" duration="10173000" />
-      <workItem from="1633674004328" duration="19660000" />
+      <workItem from="1633674004328" duration="21749000" />
+      <workItem from="1633936804528" duration="660000" />
     </task>
+    <task id="LOCAL-00001" summary="Create project">
+      <created>1633703171254</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1633703171254</updated>
+    </task>
+    <task id="LOCAL-00002" summary="Add sql file">
+      <created>1633703359330</created>
+      <option name="number" value="00002" />
+      <option name="presentableId" value="LOCAL-00002" />
+      <option name="project" value="LOCAL" />
+      <updated>1633703359330</updated>
+    </task>
+    <option name="localTasksCounter" value="3" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -110,11 +131,29 @@
       <map>
         <entry key="MAIN">
           <value>
-            <State />
+            <State>
+              <option name="FILTERS">
+                <map>
+                  <entry key="branch">
+                    <value>
+                      <list>
+                        <option value="master" />
+                      </list>
+                    </value>
+                  </entry>
+                </map>
+              </option>
+            </State>
           </value>
         </entry>
       </map>
     </option>
+    <option name="oldMeFiltersMigrated" value="true" />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Create project" />
+    <MESSAGE value="Add sql file" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add sql file" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
