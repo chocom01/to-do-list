@@ -2,8 +2,11 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="b9ea4335-fd85-4eb4-aba6-e66d60117cf9" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/dataSources/25835982-94f9-44c5-b32f-d2f3fc123e5c.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/dataSources/25835982-94f9-44c5-b32f-d2f3fc123e5c.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/database.sql" beforeDir="false" afterPath="$PROJECT_DIR$/database.sql" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/controllers/TasksController.php" beforeDir="false" afterPath="$PROJECT_DIR$/controllers/TasksController.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/core/database/QueryBuilder.php" beforeDir="false" afterPath="$PROJECT_DIR$/core/database/QueryBuilder.php" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/views/tasks.view.php" beforeDir="false" afterPath="$PROJECT_DIR$/views/tasks.view.php" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -69,13 +72,17 @@
       <recent name="$PROJECT_DIR$/core" />
     </key>
   </component>
-  <component name="RunManager">
+  <component name="RunManager" selected="JavaScript Debug.TasksController.php">
+    <configuration name="TasksController.php" type="JavascriptDebugType" temporary="true" nameIsGenerated="true" uri="http://localhost:63342/php/controllers/TasksController.php" useBuiltInWebServerPort="true">
+      <method v="2" />
+    </configuration>
     <configuration name="php" type="PHPUnitRunConfigurationType" factoryName="PHPUnit" temporary="true">
       <TestRunner directory="$PROJECT_DIR$" />
       <method v="2" />
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JavaScript Debug.TasksController.php" />
         <item itemvalue="PHPUnit.php" />
       </list>
     </recent_temporary>
@@ -104,7 +111,8 @@
       <workItem from="1633591785954" duration="14607000" />
       <workItem from="1633610359009" duration="10173000" />
       <workItem from="1633674004328" duration="21749000" />
-      <workItem from="1633936804528" duration="660000" />
+      <workItem from="1633936804528" duration="20900000" />
+      <workItem from="1634019794255" duration="11002000" />
     </task>
     <task id="LOCAL-00001" summary="Create project">
       <created>1633703171254</created>
@@ -120,7 +128,14 @@
       <option name="project" value="LOCAL" />
       <updated>1633703359330</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Edit sql file">
+      <created>1633937533958</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1633937533958</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -153,7 +168,8 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Create project" />
     <MESSAGE value="Add sql file" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add sql file" />
+    <MESSAGE value="Edit sql file" />
+    <option name="LAST_COMMIT_MESSAGE" value="Edit sql file" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

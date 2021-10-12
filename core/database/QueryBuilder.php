@@ -9,6 +9,20 @@ class QueryBuilder
         $this->pdo = $pdo;
     }
 
+    public function validate($table, $id)
+    {
+        $statement = $this->pdo->prepare("
+        SELECT EXISTS(
+               SELECT id
+               FROM {$table}
+               WHERE id =  {$id})
+        ");
+
+        $statement->execute();
+
+        return $statement->fetchAll(PDO::FETCH_COLUMN);
+    }
+
     public function selectAll()
     {
         $statement = $this->pdo->prepare(

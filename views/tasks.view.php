@@ -47,7 +47,7 @@
 
             <label>
                 <input name="id" type="hidden" value=<?=$task->id;?> />
-                <input name="name">
+                <input name="task_name">
             </label>
 
             <button type="submit" >Update</button>
