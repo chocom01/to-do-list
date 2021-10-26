@@ -34,7 +34,8 @@ class TasksController
     {
         if (Task::validate() !== null)
         {
-            redirect('newTask');
+            /** @noinspection PhpVoidFunctionResultUsedInspection */
+            return redirect('newTask');
         }
 
         Task::connectDb()->insert(
