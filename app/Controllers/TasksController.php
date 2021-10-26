@@ -34,7 +34,7 @@ class TasksController
     {
         if (Task::validate() !== null)
         {
-            return redirect('newTask');
+            redirect('newTask');
         }
 
         Task::connectDb()->insert(
@@ -47,14 +47,14 @@ class TasksController
             ]
         );
 
-        return redirect('home');
+        redirect('home');
     }
 
     public function update()
     {
         if (Task::validate() !== null)
         {
-            return redirect("task?id={$_POST['id']}");
+            redirect("task?id={$_POST['id']}");
         }
 
         Task::connectDb()->update(
@@ -80,6 +80,6 @@ class TasksController
             ]
         );
 
-        return redirect('home');
+        redirect('home');
     }
 }
