@@ -2,6 +2,7 @@
 
 class Connection
 {
+
     public static function make($config)
     {
         try {

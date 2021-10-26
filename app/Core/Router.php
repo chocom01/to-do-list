@@ -34,9 +34,13 @@ class Router
     public function direct($uri, $requestType)
     {
         if (array_key_exists($uri, $this->routes[$requestType])) {
-            return $this->callAction(
-                ...explode('@', $this->routes[$requestType][$uri])
-            );
+            try {
+                return $this->callAction(
+                    ...explode('@', $this->routes[$requestType][$uri])
+                );
+            } catch (Exception $e) {
+                die($e->getMessage());
+            }
         }
 
         throw new Exception('No route');
@@ -44,7 +48,6 @@ class Router
 
     protected function callAction($controller, $action)
     {
-
         $controller = "App\\Controllers\\{$controller}";
         $controller = new $controller;
 
