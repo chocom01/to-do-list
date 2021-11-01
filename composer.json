@@ -5,7 +5,13 @@
       "App\\": "/app"
     }
   },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
   "require": {
+    "phpunit/phpunit": "^9.5",
     "ext-pdo": "*"
   }
 }
