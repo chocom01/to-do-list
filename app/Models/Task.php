@@ -7,11 +7,11 @@ use Exception;
 
 class Task
 {
-    protected static $errors;
-    protected static $name;
-    protected static $user_id;
-    protected static $status_id;
-    protected static $priority_id;
+    public static array $errors;
+    public static string $name;
+    public static int $user_id;
+    public static int $status_id;
+    public static int $priority_id;
 
     public static function connectDb()
     {
@@ -22,18 +22,20 @@ class Task
     {
         if (strlen($name) < 1 || strlen($name) > 50)
         {
-            self::$errors['name'] = 'Must have 1-50 characters';
+            self::$errors['name'] = 'Name must have 1-50 characters';
             throw new Exception();
         }
 
         self::$name = $name;
+        return true;
     }
 
     public static function validateUser($id)
     {
-        if (self::connectDb()->entityExists('users', $_POST['user_id'])[0])
+        if (self::connectDb()->entityExists('users', $id)[0])
         {
             self::$user_id = $id;
+            return true;
         }else
         {
             self::$errors['user'] = 'User not exists';
@@ -43,9 +45,10 @@ class Task
 
     public static function validateStatus($id)
     {
-        if (self::connectDb()->entityExists('statuses', $_POST['status_id'])[0])
+        if (self::connectDb()->entityExists('statuses', $id)[0])
         {
             self::$status_id = $id;
+            return true;
         }else
         {
             self::$errors['status'] = 'Status not exists';
@@ -55,9 +58,10 @@ class Task
 
     public static function validatePriority($id)
     {
-        if (self::connectDb()->entityExists('priorities', $_POST['priority_id'])[0])
+        if (self::connectDb()->entityExists('priorities', $id)[0])
         {
             self::$priority_id = $id;
+            return true;
         }else
         {
             self::$errors['priority'] = 'Priority not exists';
@@ -65,20 +69,19 @@ class Task
         }
     }
 
-    public static function validate()
+    public static function validate($post)
     {
         try {
-            self::validateName($_POST['task_name']);
-            self::validateUser($_POST['user_id']);
-            self::validateStatus($_POST['status_id']);
-            self::validatePriority($_POST['priority_id']);
+            self::validateName($post['task_name']);
+            self::validateUser($post['user_id']);
+            self::validateStatus($post['status_id']);
+            self::validatePriority($post['priority_id']);
 
-            unset($_SESSION['invalidData']);
-            unset($_SESSION['errors']);
+            $_SESSION['unsetErrors'] = true;
         }catch (Exception $e)
         {
-            $_SESSION['invalidData'] = $_POST;
-
+            $_SESSION['unsetErrors'] = false;
+            $_SESSION['invalidData'] = $post;
             return $_SESSION['errors'] = self::$errors;
         }
     }

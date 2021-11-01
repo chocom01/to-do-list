@@ -6,11 +6,18 @@ use App\Models\Task;
 
 class TasksController
 {
+    public function __construct()
+    {
+        if ($_SESSION == null)
+        {
+            $_SESSION['users'] = Task::connectDb()->selectTable('users');
+            $_SESSION['statuses'] = Task::connectDb()->selectTable('statuses');
+            $_SESSION['priorities'] = Task::connectDb()->selectTable('priorities');
+        }
+    }
+
     public function index()
     {
-        $_SESSION['users'] = Task::connectDb()->selectTable('users');
-        $_SESSION['statuses'] = Task::connectDb()->selectTable('statuses');
-        $_SESSION['priorities'] = Task::connectDb()->selectTable('priorities');
         $sendData['tasks'] = Task::connectDb()->selectAll();
 
         return view('tasks', $sendData);
@@ -32,9 +39,8 @@ class TasksController
 
     public function save()
     {
-        if (Task::validate() !== null)
+        if (Task::validate($_POST) !== null)
         {
-            /** @noinspection PhpVoidFunctionResultUsedInspection */
             return redirect('newTask');
         }
 
@@ -53,9 +59,9 @@ class TasksController
 
     public function update()
     {
-        if (Task::validate() !== null)
+        if (Task::validate($_POST) !== null)
         {
-            redirect("task?id={$_POST['id']}");
+            return redirect("task?id={$_POST['id']}");
         }
 
         Task::connectDb()->update(

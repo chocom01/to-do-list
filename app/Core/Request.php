@@ -22,7 +22,10 @@ class Request
 
     private static function unsetErrors()
     {
-        if (parse_url($_SERVER['HTTP_REFERER'])['path'] !== $_SERVER['PATH_INFO'])
+        if (
+            parse_url($_SERVER['HTTP_REFERER'])['path'] !== $_SERVER['PATH_INFO']
+            || $_SESSION['unsetErrors']
+        )
         {
             unset($_SESSION['invalidData']);
             unset($_SESSION['errors']);
