@@ -1,7 +1,18 @@
 {
   "autoload": {
-    "classmap": [
-      "./"
-    ]
+    "psr-4": {
+      "App\\": "app/"
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Tests\\": "tests/"
+    }
+  },
+  "require": {
+    "phpunit/phpunit": "^9.5",
+    "ext-pdo": "*",
+    "squizlabs/php_codesniffer": "3.6.1",
+    "phpmd/phpmd": "2.10.2"
   }
 }
