@@ -10,9 +10,7 @@ class Request
 
         self::unsetErrors();
 
-        return trim(
-            parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/'
-        );
+        return trim(parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH), '/');
     }
 
     public static function method()
@@ -22,13 +20,23 @@ class Request
 
     private static function unsetErrors()
     {
-        if (
-            parse_url($_SERVER['HTTP_REFERER'])['path'] !== $_SERVER['PATH_INFO']
-            || $_SESSION['unsetErrors']
-        )
-        {
+        if (self::urlNotEqualPreviously()) {
             unset($_SESSION['invalidData']);
             unset($_SESSION['errors']);
         }
+    }
+
+    private static function urlNotEqualPreviously()
+    {
+        $previouslyUrl = parse_url($_SERVER['HTTP_REFERER']);
+        $currentUrl = parse_url($_SERVER['REQUEST_URI']);
+
+        if (isset($previouslyUrl['query']) && isset($currentUrl['query'])) {
+            $inequalityQuery = $previouslyUrl['query'] != $currentUrl['query'];
+        } else {
+            $inequalityQuery = true;
+        }
+
+        return $previouslyUrl['path'] != $currentUrl['path'] && $inequalityQuery;
     }
 }

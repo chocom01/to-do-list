@@ -1,6 +1,6 @@
 <?php
 
-$router->get('home', 'TasksController@index');
+$router->get('tasks', 'TasksController@index');
 
 $router->get('newTask', 'TasksController@newTask');
 

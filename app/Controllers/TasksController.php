@@ -3,90 +3,153 @@
 namespace App\Controllers;
 
 use App\Models\Task;
+use App\Validators\TaskValidator;
 
 class TasksController
 {
-    public function __construct()
-    {
-        if ($_SESSION == null)
-        {
-            $_SESSION['users'] = Task::connectDb()->selectTable('users');
-            $_SESSION['statuses'] = Task::connectDb()->selectTable('statuses');
-            $_SESSION['priorities'] = Task::connectDb()->selectTable('priorities');
-        }
-    }
-
     public function index()
     {
-        $sendData['tasks'] = Task::connectDb()->selectAll();
+        $currentQuery = $this->currentQueryStrings();
 
-        return view('tasks', $sendData);
+        $sortOrder = $this->sortOrder($currentQuery);
+        $pages = Task::countPages($currentQuery['limit']);
+        $limits = [10,25,50];
+
+        $tasks = Task::all(
+            [
+                'page' => $currentQuery['page'], 'limit' => $currentQuery['limit'],
+                'orderBy' => $currentQuery['orderBy'], 'sortBy' => $currentQuery['sortBy']
+            ]
+        );
+
+        return $this->view('tasks', compact('tasks', 'pages', 'limits', 'currentQuery', 'sortOrder'));
     }
 
     public function show()
     {
-        parse_str($_SERVER['QUERY_STRING'], $queries);
+        $associatedData = $this->associatedData();
 
-        $_SESSION['task'] = Task::connectDb()->selectById('tasks', $queries['id']);
+        $task = Task::selectById($this->getQueryString('id'));
 
-        return view('showTask');
+        if (isset($_SESSION['invalidData'])) {
+            $task = (object) $_SESSION['invalidData'];
+            $errors = $_SESSION['errors'];
+        }
+
+        return $this->view('showTask', compact('task', 'associatedData', 'errors'));
     }
 
     public function newTask()
     {
-        return view('createTask');
+        $associatedData = $this->associatedData();
+
+        if (isset($_SESSION['invalidData'])) {
+            $invalidData = (object) $_SESSION['invalidData'];
+            $errors = $_SESSION['errors'];
+        }
+
+        return $this->view('createTask', compact('associatedData', 'invalidData', 'errors'));
     }
 
     public function save()
     {
-        if (Task::validate($_POST) !== null)
-        {
-            return redirect('newTask');
+        $validatedData = TaskValidator::validate($_POST);
+
+        if (!$validatedData) {
+            redirectBack();
         }
 
-        Task::connectDb()->insert(
-            'tasks',
-            [
-                'name' => $_POST['task_name'],
-                'user_id' => $_POST['user_id'],
-                'status_id' => $_POST['status_id'],
-                'priority_id' => $_POST['priority_id']
-            ]
-        );
+        $task = new Task();
+        $task->create($validatedData);
 
-        redirect('home');
+        redirectRoot();
     }
 
     public function update()
     {
-        if (Task::validate($_POST) !== null)
-        {
-            return redirect("task?id={$_POST['id']}");
+        $validatedData = TaskValidator::validate($_POST);
+
+        if (!$validatedData) {
+            redirectBack();
         }
 
-        Task::connectDb()->update(
-            'tasks',
-            [
-            'name' => $_POST['task_name'],
-            'id' => $_POST['id'],
-            'status_id' => $_POST['status_id'],
-            'priority_id' => $_POST['priority_id'],
-            'user_id' => $_POST['user_id']
-            ]
-        );
+        task::update($validatedData);
 
-        redirect("task?id={$_POST['id']}");
+        redirectBack();
     }
 
     public function delete()
     {
-        Task::connectDb()->delete(
-            'tasks',
-            [
-            'id' => $_POST['id']
-            ]
-        );
+        Task::delete($_POST['id']);
 
-        redirect('home');
+        redirectRoot();
+    }
+
+    private function view($name, $data = [])
+    {
+        extract($data);
+
+        return require "../app/views/{$name}.view.php";
+    }
+
+    private function associatedData(): array
+    {
+        return [
+            'users' => Task::buildQuery()->selectTable('users'),
+            'statuses' => Task::buildQuery()->selectTable('statuses'),
+            'priorities' => Task::buildQuery()->selectTable('priorities')
+        ];
+    }
+
+    private function getQueryString($queryString, $elseStatement = '')
+    {
+        parse_str($_SERVER['QUERY_STRING'], $queries);
+
+        if ($queries[$queryString] !== null) {
+            return $queries[$queryString];
+        } else {
+            return $elseStatement;
+        }
+    }
+
+    private function currentQueryStrings()
+    {
+        return [
+            'page' => $this->getQueryString('page', 1),
+            'limit' => $this->getQueryString('limit', 10),
+            'orderBy' => $this->getQueryString('orderBy', 'id'),
+            'sortBy' => $this->getQueryString('sortBy', 'asc')
+        ];
+    }
+
+    private function defineSortOrder($currentQuery, $columnName): array
+    {
+        if ($currentQuery['orderBy'] !== $columnName) {
+            return [
+                'query' => '?' . http_build_query(array_replace($currentQuery, ['orderBy' => $columnName])),
+                'class' => 'passive'
+            ];
+        }
+        if ($currentQuery['sortBy'] === 'asc') {
+            return [
+                'query' => '?' . http_build_query(array_replace($currentQuery, ['sortBy' => 'desc'])),
+                'class' => 'sortUp'
+            ];
+        } else {
+            return [
+                'query' => '?' . http_build_query(array_replace($currentQuery, ['sortBy' => 'asc'])),
+                'class' => 'sortDown'
+            ];
+        }
+    }
+
+    private function sortOrder($currentQuery): array
+    {
+        return [
+            'name' => $this->defineSortOrder($currentQuery, 'name'),
+            'user' => $this->defineSortOrder($currentQuery, 'user_id'),
+            'status' => $this->defineSortOrder($currentQuery, 'status_id'),
+            'priority' => $this->defineSortOrder($currentQuery, 'priority_id')
+        ];
     }
 }

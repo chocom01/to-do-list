@@ -1,25 +1,30 @@
 <?php
 
 use App\Core\App;
+use App\Core\Database\Connection;
+use App\Core\Database\TaskQueryBuilder;
 
-App::bind('config', require 'config.php');
+App::bind('config', function () {
+    return require '../config.php';
+});
 
-App::bind('database', new TaskQueryBuilder(
-    Connection::make(App::get('config')['database'])
-));
-
-function view($name, $data = [])
-{
-    if (!isset($_SESSION))
-    {
-        redirect('home');
-    }
-    extract($data);
-
-    return require "app/views/{$name}.view.php";
-}
+App::bind('taskQueryBuilder', function () {
+    $dbConfig = App::get('config')['database'];
+    $dbConnection = Connection::make($dbConfig);
+    return new TaskQueryBuilder($dbConnection);
+});
 
 function redirect($path)
 {
-    header("Location: /{$path}");
+    header("Location: tasks/{$path}");
+}
+
+function redirectBack()
+{
+    header('Location: ' . $_SERVER['HTTP_REFERER']);
+}
+
+function redirectRoot()
+{
+    header("Location: tasks/?page=1&limit=10&orderBy=status_id&sortBy=asc");
 }

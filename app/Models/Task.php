@@ -3,86 +3,79 @@
 namespace App\Models;
 
 use App\Core\App;
-use Exception;
 
 class Task
 {
-    public static array $errors;
-    public static string $name;
-    public static int $user_id;
-    public static int $status_id;
-    public static int $priority_id;
-
-    public static function connectDb()
+    public static function all($parameters): array
     {
-        return App::get('database');
+        $checkedParameters = self::checkInputSortData($parameters);
+
+        return self::buildQuery()->selectAll($checkedParameters);
     }
 
-    public static function validateName($name)
+    public static function selectById($id): object
     {
-        if (strlen($name) < 1 || strlen($name) > 50)
-        {
-            self::$errors['name'] = 'Name must have 1-50 characters';
-            throw new Exception();
-        }
-
-        self::$name = $name;
-        return true;
+        return self::buildQuery()->select($id)[0];
     }
 
-    public static function validateUser($id)
+    public static function update($validatedData)
     {
-        if (self::connectDb()->entityExists('users', $id)[0])
-        {
-            self::$user_id = $id;
-            return true;
-        }else
-        {
-            self::$errors['user'] = 'User not exists';
-            throw new Exception();
-        }
+        return self::buildQuery()->update(
+            parameters: array_combine(
+                array_keys($validatedData),
+                array_values($validatedData)
+            )
+        );
     }
 
-    public static function validateStatus($id)
+    public function create($validatedData): void
     {
-        if (self::connectDb()->entityExists('statuses', $id)[0])
-        {
-            self::$status_id = $id;
-            return true;
-        }else
-        {
-            self::$errors['status'] = 'Status not exists';
-            throw new Exception();
-        }
+        $columnNames = array_keys($validatedData);
+        $columnValues = array_values($validatedData);
+
+        $dataForCreate = array_combine($columnNames, $columnValues);
+
+        self::buildQuery()->insert(
+            parameters: $dataForCreate
+        );
     }
 
-    public static function validatePriority($id)
+    public static function delete($id): void
     {
-        if (self::connectDb()->entityExists('priorities', $id)[0])
-        {
-            self::$priority_id = $id;
-            return true;
-        }else
-        {
-            self::$errors['priority'] = 'Priority not exists';
-            throw new Exception();
-        }
+        self::buildQuery()->delete($id);
     }
 
-    public static function validate($post)
+    public static function countPages($limit): array
     {
-        try {
-            self::validateName($post['task_name']);
-            self::validateUser($post['user_id']);
-            self::validateStatus($post['status_id']);
-            self::validatePriority($post['priority_id']);
+        $countRows = self::buildQuery()->countRows()[0];
 
-            $_SESSION['unsetErrors'] = true;
-        }catch (Exception $e)
-        {
-            $_SESSION['unsetErrors'] = false;
-            $_SESSION['invalidData'] = $post;
-            return $_SESSION['errors'] = self::$errors;
+        if ($limit > $countRows) {
+            $pagesCount = 1;
+        } else {
+            $pagesCount = ceil($countRows / $limit);
         }
+
+        return range(1, $pagesCount);
+    }
+
+    private static function checkInputSortData($parameters)
+    {
+        $taskColumns = array_column(self::buildQuery()->columnNames(), 'COLUMN_NAME');
+        $ascDesc = ['asc', 'desc'];
+
+        $checkOrderBy = in_array($parameters['orderBy'], $taskColumns);
+        $checkSortBy = in_array($parameters['sortBy'], $ascDesc);
+
+        if (!$checkOrderBy || !$checkSortBy) {
+            $parameters['orderBy'] = 'id';
+            $parameters['sortBy'] = 'asc';
+        }
+
+        return $parameters;
+    }
+
+    public static function buildQuery(): object
+    {
+        return App::get('taskQueryBuilder');
     }
 }
